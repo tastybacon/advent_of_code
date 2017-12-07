@@ -5,7 +5,8 @@ reallocate(Blocks) ->
   reallocate(Blocks, 0, []).
 reallocate(Blocks, Count, PreviousStates) ->
   case lists:member(Blocks, PreviousStates) of
-    true -> {ok, Count, Blocks};
+    true -> CycleLength = index_of(Blocks, PreviousStates) + 1,
+      {ok, Count, Blocks, CycleLength};
     false -> NewBlocks = step(Blocks),
              reallocate(NewBlocks, Count + 1, [Blocks | PreviousStates])
   end.
@@ -25,6 +26,13 @@ step(Array, Remaining, ZeroPoint, RelativeIndex) ->
     ZeroPoint,
     RelativeIndex + 1
    ).
+
+index_of(Element, List) ->
+  index_of(Element, List, 0).
+index_of(Element, [Element | _], Index) ->
+  Index;
+index_of(Element, [_ | T], Index) ->
+  index_of(Element, T, Index + 1).
 
 max_with_index([]) ->
   {err};
