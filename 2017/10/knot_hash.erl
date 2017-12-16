@@ -1,16 +1,19 @@
 -module(knot_hash).
--export([compute_hash_round/2, hash/0, hash/3]).
+-export([compute_hash_round/2, hash/0, hash/3, to_hex/1]).
+
+to_hex(List) ->
+  list_to_binary(
+    lists:flatmap(
+      fun(X) -> io_lib:format("~2.16.0B", [X]) end,
+      List
+     )
+   ).
 
 dense_hash(SparseHash) ->
   dense_hash(SparseHash, []).
 
 dense_hash([], Acc) ->
-  list_to_binary(
-    lists:flatmap(
-      fun(X) -> io_lib:format("~2.16.0B", [X]) end,
-      lists:reverse(Acc)
-     )
-   );
+  lists:reverse(Acc);
 dense_hash(SparseHash, DenseAcc) ->
   {Current, Rest} = lists:split(16, SparseHash),
   Densified = lists:foldl(fun(X, Acc) -> X bxor Acc end, 0, Current),
