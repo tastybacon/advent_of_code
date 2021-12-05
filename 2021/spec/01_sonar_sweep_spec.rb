@@ -2,7 +2,7 @@
 
 require 'sonar_sweep'
 
-describe 'Day 1: Sonar Sweep' do
+describe 'Day 01: Sonar Sweep' do
   context 'Part 1' do
     it 'sums the test data correctly' do
       input = [199, 200, 208, 210, 200, 207, 240, 269, 260, 263]
