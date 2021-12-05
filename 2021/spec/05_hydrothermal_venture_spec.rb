@@ -2,7 +2,7 @@
 
 require 'hydrothermal_venture'
 
-describe 'Day 04: Giant Squid' do
+describe 'Day 05: Hydrothermal Venture' do
   context 'Part 1' do
     it 'correctly determines the number of dangerous points in the test data' do
       input = File.read('resources/05/test_input.txt')
