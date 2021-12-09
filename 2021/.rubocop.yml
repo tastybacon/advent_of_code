@@ -8,3 +8,6 @@ Metrics/BlockLength:
 
 Naming/MethodParameterName:
   Enabled: false
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: consistent_comma
