@@ -16,36 +16,18 @@ module HydrothermalVenture
   end
 
   def self.get_dangerous_points(lines)
-    point_counts = get_vent_overlap_count(lines)
-    point_counts.select { |_k, v| v > 1 }.map(&:first)
-  end
-
-  def self.get_vent_overlap_count(lines)
-    lines.each_with_object(Hash.new(0)) do |line, acc|
-      line.points.each do |point|
-        acc[point] += 1
-      end
-    end
-  end
-
-  # Draw a grid that counts how many lines overlap at each point
-  #   from (min_coord, min_coord) to (max_coord, max_coord)
-  def self.visualize_vent_map(lines, min_coord, max_coord)
-    point_counts = get_vent_overlap_count(lines)
-    min_coord, max_coord = [min_coord, max_coord].minmax
-    (min_coord..max_coord).each do |y|
-      (min_coord..max_coord).each do |x|
-        print(point_counts[[x, y]])
-      end
-      print("\n")
-    end
+    lines
+      .flat_map { |line| line.points.map(&:hash) }
+      .tally
+      .select! { |_point, danger_level| danger_level > 1 }
+      .map(&:first)
   end
 
   # Represents a hydrothermal vent on the ocean floor. Based on the given
   # coordinates, the `#points` method can list all the points affected by this
   #   vent.
   # The given coordinates should be a part of a horizontal, vertical, or 45
-  #   degree diagonal.
+  #   degree diagonal line.
   class VentLine
     def initialize(x1, y1, x2, y2)
       @x1 = x1
