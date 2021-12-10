@@ -17,10 +17,24 @@ module HydrothermalVenture
 
   def self.get_dangerous_points(lines)
     lines
-      .flat_map { |line| line.points.map(&:hash) }
+      .flat_map { |line| line.points.map { |p| pack_point(p) } }
       .tally
-      .select! { |_point, danger_level| danger_level > 1 }
-      .map(&:first)
+      .filter_map { |point, danger| unpack_point(point) if danger > 1 }
+  end
+
+  SHIFT = 16
+  MASK = 2**SHIFT
+
+  # Store an array of two integers in a single integer. This saves a lot of
+  # time when interacting with the hash in `get_dangerous_points` and makes it
+  # possible to retrieve the point afterwards. Should work as long as the first
+  # value is less than 2^16, which is good enough for me.
+  def self.pack_point(point)
+    point[0] + (point[1] << SHIFT)
+  end
+
+  def self.unpack_point(packed_point)
+    [packed_point & MASK, packed_point >> SHIFT]
   end
 
   # Represents a hydrothermal vent on the ocean floor. Based on the given
