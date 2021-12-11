@@ -34,7 +34,7 @@ module SmokeBasin
       [row + 1, column],
       ([row - 1, column] if row.positive?),
       [row, column + 1],
-      ([row, column - 1] if column.positive?)
+      ([row, column - 1] if column.positive?),
     ].compact
   end
 
