@@ -64,7 +64,7 @@ module DumboOctopus
 
   # Returns the number of flashes that happened in the step
   def self.simulate(octopi)
-    Enumerator.new { |yielder| loop { yielder.yield(simulate_step(octopi)) } }
+    Enumerator.produce { simulate_step(octopi) }
   end
 
   def self.find_bright_step(octopi)
