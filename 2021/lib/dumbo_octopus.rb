@@ -106,8 +106,8 @@ module DumboOctopus
     end
 
     def should_increment?(source, step_id)
-      # Don't increment if the source was our own flash or if we have already
-      # flashed during this step.
+      # Don't increment (i.e. return false) if the source was our own flash or
+      # if we have already flashed during this step. Otherwise, return true.
       source != self && (step_id.nil? || step_id != last_step_flashed)
     end
 
