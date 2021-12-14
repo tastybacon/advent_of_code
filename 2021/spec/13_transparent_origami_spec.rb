@@ -7,7 +7,7 @@ describe 'Day 13: Transparent Origami' do
   let(:input) { TransparentOrigami.parse_input(File.read('resources/13/input.txt')) }
 
   context 'Part 1' do
-    it 'does the thing' do
+    it 'counts the number of visible points after 1 fold of the test data' do
       result = TransparentOrigami.fold(
         test_input[:points],
         test_input[:instructions].first
@@ -15,7 +15,7 @@ describe 'Day 13: Transparent Origami' do
       expect(TransparentOrigami.count_visible_points(result)).to eq 17
     end
 
-    it 'does the thing' do
+    it 'counts the number of visible points after 1 fold' do
       result = TransparentOrigami.fold(
         input[:points],
         input[:instructions].first
@@ -28,7 +28,7 @@ describe 'Day 13: Transparent Origami' do
     let(:test_dot_matrix) { File.read('resources/13/test_result.txt') }
     let(:dot_matrix) { File.read('resources/13/result.txt') }
 
-    it 'does the thing' do
+    it 'follows the instructions correctly for the test data' do
       result = TransparentOrigami.follow_instructions(
         test_input[:points],
         test_input[:instructions]
@@ -36,7 +36,7 @@ describe 'Day 13: Transparent Origami' do
       expect(TransparentOrigami.draw_points(result)).to eq test_dot_matrix
     end
 
-    it 'does the thing' do
+    it 'follows the instructions correctly' do
       result = TransparentOrigami.follow_instructions(
         input[:points],
         input[:instructions]
