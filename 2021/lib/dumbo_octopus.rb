@@ -58,7 +58,7 @@ module DumboOctopus
   # Returns the number of flashes that happened in the step
   def self.simulate_step(octopi, step_id = generate_step_nonce)
     octopi.sum do |octopus|
-      octopus.increment_energy(step_id: step_id)
+      octopus.increment_energy(step_id:)
     end
   end
 
@@ -98,7 +98,7 @@ module DumboOctopus
       if energy_level >= 9
         self.energy_level = 0
         self.last_step_flashed = step_id
-        1 + neighbors.sum { |other| other.increment_energy(source: self, step_id: step_id) }
+        1 + neighbors.sum { |other| other.increment_energy(source: self, step_id:) }
       else
         self.energy_level += 1
         0

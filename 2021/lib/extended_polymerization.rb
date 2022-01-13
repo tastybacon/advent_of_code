@@ -11,7 +11,7 @@ module ExtendedPolymerization
       acc[pattern[0]] ||= {}
       acc[pattern[0]][pattern[1]] = addition
     end
-    { template: template, instructions: instructions }
+    { template:, instructions: }
   end
 
   def self.parse_instruction(line)
