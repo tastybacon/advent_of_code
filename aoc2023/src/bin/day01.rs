@@ -30,14 +30,11 @@ impl CalibrationDocumentParser {
 
     fn parse_line(&self, line: &str) -> Option<u32> {
         let first = self.regex.find(line)?.as_str();
-        let mut last = None;
-        for i in (0..(line.len())).rev() {
-            if let Some(l) = self.regex.find_at(line, i) {
-                last = Some(l.as_str());
-                break;
-            };
-        }
-        let last = last?;
+        // I wonder if reversing the string+regex patterns would be better than this.
+        let last = line
+            .char_indices()
+            .rev()
+            .find_map(|(from, _)| self.regex.find_at(line, from).map(|v| v.as_str()))?;
         Some(str_to_val(first) * 10 + str_to_val(last))
     }
 }
