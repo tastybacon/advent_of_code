@@ -1,6 +1,5 @@
 use std::{
-    fs::File,
-    io::{self, BufRead},
+    io::{self},
     path::{Path, PathBuf},
 };
 
@@ -46,22 +45,22 @@ fn main() -> Result<(), Error> {
     Ok(())
 }
 
-pub fn run<P>(filename: P, parse_letters: bool) -> Result<u32, Error>
+pub fn run<P>(filename: P, parse_letters: bool) -> Result<u32, io::Error>
 where
     P: AsRef<Path>,
 {
-    let file = File::open(filename)?;
     let parser = CalibrationDocumentParser::new(parse_letters);
-    Ok(io::BufReader::new(file)
-        .lines()
-        .map(|line| {
-            let Ok(line) = line else {
-                eprintln!("Error reading line: {}", line.unwrap_err());
-                return 0;
-            };
-            parser.parse_line(&line).unwrap()
-        })
-        .sum())
+    aoc2023::read_lines(filename).map(|lines| {
+        lines
+            .map(|line| {
+                let Ok(line) = line else {
+                    eprintln!("Error reading line: {}", line.unwrap_err());
+                    return 0;
+                };
+                parser.parse_line(&line).unwrap()
+            })
+            .sum()
+    })
 }
 
 fn str_to_val(s: &str) -> u32 {
@@ -165,6 +164,17 @@ mod test {
         assert_eq!(result, Some(19));
     }
 
+    // This case took me a little while to figure out. My first approach to the
+    // problem was to find all matches in the string going to left-to-right,
+    // then use the first and last matches. I thought that would be simpler than
+    // finding the first left-to-right match then the first right-to-left match,
+    // but those two approaches actually produce a different result (with
+    // non-overlapping matches) when encoutering something like "oneight". Going
+    // left-to-right it'll match "one" and right-to-left it'll match "eight".
+    //
+    // I think finding all matches was also slightly less efficient in most
+    // cases, but the program completes running on the actual input so fast
+    // anyway it isn't really noticeable.
     #[test]
     fn tricky() {
         let result = parser().parse_line("1234oneight");
